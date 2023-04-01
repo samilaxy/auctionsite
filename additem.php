@@ -17,13 +17,13 @@ $result = $conn->query($sql);
 
 <head>
     <title>My Auction Site</title>
-    <link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="stylesheet" type="text/css" href="style.css"> 
 </head>
 
 <body>
     <!-- Top navigation bar -->
 	<div class="topnav">
-		<a href="server.php">Home</a>
+        <a href="server.php">Home</a>
 		<a href="additem.php">Add Item</a>
 		<a href="#">About</a>
 	</div>
@@ -59,32 +59,54 @@ $result = $conn->query($sql);
     <div style="margin-left: 200px;">
 
 
-        <h1>All Items</h1>
-        <table>
-            <tr>
-                <th>Name</th>
-                <th>Description</th>
-                <th>Starting Price</th>
-                <th>Image</th>
-            </tr>
-            <?php
-            // Retrieve data from the categories table
-            $sql = "SELECT * FROM item";
-            $result = $conn->query($sql);
+    <form method="POST" action="add_item.php">
+  <label for="name">Name:</label>
+  <input type="text" name="name" required><br>
 
-            // Check if any rows were returned
-            if ($result->num_rows > 0) {
-                // Output data of each row
-                while ($row = $result->fetch_assoc()) {
-                    echo "<tr><td>" . $row["name"] . "</td><td>" . $row["description"] . "</td><td>" . $row["starting_price"] . "</td><td style='max-width: 10px; height: 20px;'><img src='" . $row["image"] . "' alt='Item Image'></td></tr>";
-                }
-            } else {
-                echo "<tr><td colspan='4'>No items found.</td></tr>";
-            }
+  <label for="description">Description:</label>
+  <textarea name="description" required></textarea><br>
 
-            //$conn->close();
-            ?>
-        </table>
+  <label for="starting_price">Starting Price:</label>
+  <input type="number" name="starting_price" required><br>
+
+  <label for="category_id">Category:</label>
+  <select name="category_id" required>
+    <option value="">Select a category</option>
+    <option value="1">Vehicle</option>
+    <option value="2">House</option>
+    <option value="2">Furniture</option>
+    <option value="3">Computer</option>
+    <!-- Add more options as needed -->
+  </select><br>
+
+  <input type="submit" value="Add Item">
+  <?php
+// Check if the form has been submitted
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+  // Get the form data
+  $name = $_POST["name"];
+  $description = $_POST["description"];
+  $starting_price = $_POST["starting_price"];
+  $category_id = $_POST["category_id"];
+
+  // Validate the form data
+  // ...
+
+  // Insert the item into the database
+  $sql = "INSERT INTO item (name, description, starting_price, category_id) VALUES ('$name', '$description', $starting_price, $category_id)";
+  $result = $conn->query($sql);
+
+  if ($result) {
+    echo "Item added successfully.";
+  } else {
+    echo "Error adding item: " . $conn->error;
+  }
+}
+?>
+
+</form>
+
+    
     </div>
 
 </body>
