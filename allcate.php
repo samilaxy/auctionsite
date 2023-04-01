@@ -19,10 +19,16 @@ $result = $conn->query($sql);
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <!-- Top navigation bar -->
+	<div class="topnav">
+		<a href="#">Home</a>
+		<a href="#">Categories</a>
+		<a href="#">About</a>
+	</div>
     
 	<!-- Sidebar -->
 	<div class="sidebar">
-		<a href="server.php">Home</a>
+		<a href="">Home</a>
 		<a href="#">Categories</a>
         <ul>
 		<?php
@@ -35,7 +41,6 @@ $result = $conn->query($sql);
 		if ($result->num_rows > 0) {
 			// Output data of each row
 			while($row = $result->fetch_assoc()) {
-                $CatName = $row["name"];
 				echo "<li><a href='category_items.php?category_id=" . $row["id"] . "'>" . $row["name"] . "</a></li>";
 			}
 		} else {
@@ -44,26 +49,25 @@ $result = $conn->query($sql);
 
 		$conn->close();
 		?></ul>
-        <a href="#">About</a>
+        <a href="category_items.php?category_id=<?php echo $row["id"]; ?>"><?php echo $row["name"]; ?></a>
+		<a href="#">About</a>
 	</div>
 
 <!-- Page content -->
 <div style="margin-left: 200px;">
-	<h2>Category 3</h2>
+	<h1>Items</h1>
     
 	<table>
     <tr>
 			<th>Name</th>
 			<th>Description</th>
-            <th>Starting Price</th>
-            <th>Category ID</th>
+            <th>starting_price</th>
 		</tr>
 		<?php
 		// Retrieve data from the categories table
-        $category_id = $_GET['category_id'];
-		$sql = "SELECT * FROM item WHERE category_id = 3" ;
+		$sql = "SELECT * FROM item";
 		$result = $conn->query($sql);
-       
+
 		// Check if any rows were returned
 if ($result->num_rows > 0) {
     // Output data of each row
@@ -82,3 +86,30 @@ $conn->close();
 </body>
 </html>
 ?>
+
+
+
+
+
+
+// Check if any rows were returned
+// Retrieve data from the items table for the selected category
+            if (isset($_GET["category_id"])) {
+                $category_id = $_GET["category_id"];
+                $sql = "SELECT * FROM item WHERE category_id = $category_id";
+                $result = $conn->query($sql);
+                echo "$result";
+                // Check if any rows were returned
+                if ($result->num_rows > 0) {
+                    // Output data of each row
+                    while ($row = $result->fetch_assoc()) {
+                        echo "<tr><td>" . $row["name"] . "</td><td>" . $row["description"] . "</td><td>" . $row["starting_price"] . "</td></tr>";
+                    }
+                } else {
+                    echo "<tr><td colspan='3'>No items found.</td></tr>";
+                }
+            } else {
+                echo "<tr><td colspan='3'>No category selected.</td></tr>";
+            }
+
+            $conn->close();

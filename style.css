@@ -21,6 +21,7 @@
     background-color: #ddd;
     color: black;
   }
+  
 .sidebar {
     height: 100%;
     width: 200px;
@@ -54,7 +55,7 @@ th {
     padding-top: 12px;
     padding-bottom: 12px;
     text-align: left;
-    background-color: #9fc4a0;
+    background-color: #b8bfb8;
     color: white;
 }
 tr:nth-child(even){background-color: #f2f2f2;}

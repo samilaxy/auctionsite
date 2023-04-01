@@ -7,10 +7,6 @@ $connection = new Connection('localhost', 'root', '', 'auctionsite');
 // Connect to the database
 $conn = $connection->connect();
 
-// Retrieve data from the categories table
-$sql = "SELECT * FROM category";
-$result = $conn->query($sql);
-
 ?>
 <!DOCTYPE html>
 <html>
@@ -45,7 +41,7 @@ $result = $conn->query($sql);
 
     <!-- Page content -->
     <div style="margin-left: 200px;">
-        <h1>All Items</h1>
+        <h1>Items</h1>
         <table>
             <tr>
                 <th>Name</th>
@@ -54,21 +50,28 @@ $result = $conn->query($sql);
                 <th>Category ID</th>
             </tr>
             <?php
-            // Retrieve data from the categories table
-            $sql = "SELECT * FROM item";
-            $result = $conn->query($sql);
-
             // Check if any rows were returned
-            if ($result->num_rows > 0) {
-                // Output data of each row
-                while ($row = $result->fetch_assoc()) {
-                    echo "<tr><td>" . $row["name"] . "</td><td>" . $row["description"] . "</td><td>" . $row["starting_price"] . "</td><td>" . $row["category_id"] . "</td></tr>";
+            // Retrieve data from the items table for the selected category
+            if (isset($_GET["category_id"])) {
+                $category_id = $_GET["category_id"];
+                $sql = "SELECT `name`, `description`, `starting_price`, `category_id` FROM `item` WHERE `category_id` = $category_id";
+                $result = $conn->query($sql);
+            
+                // Check if any rows were returned
+                if ($result->num_rows > 0) {
+                    // Output data of each row
+                    while ($row = $result->fetch_assoc()) {
+                        echo "<tr><td>" . $row["name"] . "</td><td>" . $row["description"] . "</td><td>" . $row["starting_price"]. "</td><td>" . $row["category_id"] . "</td></tr>";
+                    }
+                } else {
+                    echo "<tr><td colspan='4'>No items found.</td></tr>";
                 }
             } else {
-                echo "<tr><td colspan='4'>No items found.</td></tr>";
+                echo "<tr><td colspan='4'>No category selected.</td></tr>";
             }
+            
 
-            //$conn->close();
+            $conn->close();
             ?>
         </table>
     </div>
