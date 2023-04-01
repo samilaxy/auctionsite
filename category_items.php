@@ -54,7 +54,7 @@ $conn = $connection->connect();
 
     <!-- Page content -->
     <div style="margin-left: 200px;">
-        <h1>Vehicle</h1>
+        <h1>Items</h1>
         <table>
             <tr>
                 <th>Category ID</th>
